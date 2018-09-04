@@ -35,6 +35,14 @@ link "#{app_install_dir}/#{app_name}"  do
   group app_group
 end
 
+template "#{app_install_dir}/#{app_name}/.env" do
+  source 'dotenv.erb'
+  owner app_user
+  group app_group
+  mode 0600
+  variables env_vars: node[cookbook_name]['env_vars'].sort.to_h
+end
+
 template node[cookbook_name]['env_vars_file'] do
   source 'env_vars.erb'
   owner app_user

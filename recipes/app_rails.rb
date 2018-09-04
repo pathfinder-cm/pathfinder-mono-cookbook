@@ -13,8 +13,8 @@ end
 execute 'setup database' do
   user app_user
   command "
-    RAILS_ENV=#{env} bin/rake db:migrate && \
-    RAILS_ENV=#{env} bin/rake assets:precompile
+    RAILS_ENV=#{app_env} bin/rake db:migrate && \
+    RAILS_ENV=#{app_env} bin/rake assets:precompile
   "
   cwd "#{app_install_dir}/#{app_name}"
 end
