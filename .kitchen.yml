@@ -3,8 +3,8 @@ driver:
   name: vagrant
   product_version: 14.1.1
   network:
-  - ["forwarded_port", {guest: 8080, host: 8080}]
-  - ["private_network", {ip: "192.168.33.20"}]
+  - ["forwarded_port", {guest: 8080, host: 8090}]
+  - ["private_network", {ip: "192.168.33.30"}]
 
 provisioner:
   name: chef_zero
@@ -25,11 +25,11 @@ platforms:
       product_version: latest
 
 suites:
-  - name: default
+  - name: app
     run_list:
-      - recipe[pathfinder-mono::default]
+      - recipe[pathfinder-mono::app]
     verifier:
       inspec_tests:
-        - test/integration/default
+        - test/integration/app
     attributes:
       pathfinder-mono:
