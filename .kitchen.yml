@@ -1,0 +1,35 @@
+---
+driver:
+  name: vagrant
+  product_version: 14.1.1
+  network:
+  - ["forwarded_port", {guest: 8080, host: 8080}]
+  - ["private_network", {ip: "192.168.33.20"}]
+
+provisioner:
+  name: chef_zero
+  # You may wish to disable always updating cookbooks in CI or other testing environments.
+  # For example:
+  #   always_update_cookbooks: <%= !ENV['CI'] %>
+  always_update_cookbooks: true
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: opscode-ubuntu-18.04-chef-14
+    driver:
+      box: bento/ubuntu-18.04
+    provisioner:
+      product_name: chef
+      product_version: latest
+
+suites:
+  - name: default
+    run_list:
+      - recipe[pathfinder-mono::default]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+      pathfinder-mono:
