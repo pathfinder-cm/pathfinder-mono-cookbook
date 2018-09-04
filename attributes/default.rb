@@ -24,6 +24,7 @@ default[cookbook_name]['app_env'] = 'production'
 default[cookbook_name]['prefix_env_vars'] = '/etc/default'
 default[cookbook_name]['env_vars_file'] = "#{node[cookbook_name]['prefix_env_vars']}/#{app_name}"
 default[cookbook_name]['env_vars'] = {
+  'RAILS_ENV' => node[cookbook_name]['app_env'],
   'RAILS_SERVE_STATIC_FILES' => true,
   'RAILS_MASTER_KEY' => '',
   'SECRET_KEY_BASE' => '123456',
@@ -61,3 +62,29 @@ default[cookbook_name]['puma_config_dir'] = "#{default[cookbook_name]['puma_dir'
 default[cookbook_name]['puma_tmp_dir'] = "#{default[cookbook_name]['puma_dir']}/tmp"
 default[cookbook_name]['puma_pids_dir'] = "#{default[cookbook_name]['puma_tmp_dir']}/pids"
 default[cookbook_name]['puma_state_dir'] = "#{default[cookbook_name]['puma_tmp_dir']}/state"
+
+# Scheduler config
+default[cookbook_name]['scheduler']['cli_opts'] = []
+default[cookbook_name]['scheduler']['env_vars_file'] = "#{node[cookbook_name]['prefix_env_vars']}/pathfinder-scheduler"
+default[cookbook_name]['scheduler']['prefix_log'] = '/var/log/pathfinder-scheduler'
+default[cookbook_name]['scheduler']['log_file_name'] = 'scheduler.log'
+default[cookbook_name]['scheduler']['systemd_unit'] = {
+  'Unit' => {
+    'Description' => 'Pathfinder Scheduler',
+    'After' => 'network.target'
+  },
+  'Service' => {
+    'Type' => 'simple',
+    'User' => node[cookbook_name]['app_user'],
+    'Group' => node[cookbook_name]['app_group'],
+    'Restart' => 'on-failure',
+    'RestartSec' => 2,
+    'StartLimitInterval' => 50,
+    'StartLimitBurst' => 10,
+    'ExecStart' => 'TO_BE_COMPLETED',
+    'WorkingDirectory' => "#{node[cookbook_name]['app_install_dir']}/#{app_name}"
+  },
+  'Install' => {
+    'WantedBy' => 'multi-user.target'
+  }
+}

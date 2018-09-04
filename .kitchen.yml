@@ -26,9 +26,11 @@ suites:
     run_list:
       - recipe[pathfinder-mono::db]
       - recipe[pathfinder-mono::app]
+      - recipe[pathfinder-mono::scheduler]
     verifier:
       inspec_tests:
         - test/integration/db
         - test/integration/app
+        - test/integration/scheduler
     attributes:
       pathfinder-mono:
