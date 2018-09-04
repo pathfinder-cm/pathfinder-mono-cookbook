@@ -29,9 +29,28 @@ default[cookbook_name]['env_vars'] = {
   'TIMESTAMP_FORMAT' => '%d-%m-%Y %H:%M',
   'PROD_DB_HOST' => 'localhost',
   'PROD_DB_PORT' => 5432,
-  'PROD_DB_NAME' => 'pathfinder-mono_production',
+  'PROD_DB_NAME' => 'pathfinder_mono_production',
   'PROD_DB_POOL' => 5,
   'PROD_DB_USER' => 'pathfinder-mono',
   'PROD_DB_PASS' => '123456',
+}
+
+# PostgreSQL config
+pg_version = '10'
+default['postgresql']['version'] = pg_version
+default['postgresql']['config_dir'] = "/etc/postgresql/#{pg_version}/main"
+default['postgresql']['data_dir'] = "/var/lib/postgresql/#{pg_version}/main"
+default['postgresql']['external_pid_file'] = "/var/run/postgresql/#{pg_version}-main.pid"
+default['postgresql']['hba_file'] = "#{node['postgresql']['config_dir']}/pg_hba.conf"
+default['postgresql']['ident_file'] = "#{node['postgresql']['config_dir']}/pg_ident.conf"
+
+default['postgresql']['config'] = {
+  'listen_addresses' => '*',
+  'timezone' => 'Asia/Jakarta',
+  'log_timezone' => 'Asia/Jakarta',
+  'dynamic_shared_memory_type' => 'posix',
+  'log_line_prefix' => '%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h ',
+  'track_counts' => 'on',
+  'max_connections' => 1000
 }
 
