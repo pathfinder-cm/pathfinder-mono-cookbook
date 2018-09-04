@@ -24,17 +24,11 @@ platforms:
 suites:
   - name: app
     run_list:
+      - recipe[pathfinder-mono::db]
       - recipe[pathfinder-mono::app]
     verifier:
       inspec_tests:
-        - test/integration/app
-    attributes:
-      pathfinder-mono:
-  - name: db
-    run_list:
-      - recipe[pathfinder-mono::db]
-    verifier:
-      inspec_tests:
         - test/integration/db
+        - test/integration/app
     attributes:
       pathfinder-mono:
