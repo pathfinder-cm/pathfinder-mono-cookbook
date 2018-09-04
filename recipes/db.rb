@@ -51,8 +51,3 @@ pathfinder_mono_pg_database "Create Database" do
   database env['PROD_DB_NAME']
   user env['PROD_DB_USER']
 end
-
-pathfinder_mono_pg_gem 'Install PG Gem' do
-  client_version version
-  version '1.0.0'
-end

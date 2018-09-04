@@ -21,3 +21,8 @@ end
 package %w(software-properties-common ruby2.5 ruby2.5-dev nodejs build-essential patch zlib1g-dev liblzma-dev libffi-dev libcurl4-openssl-dev)
 
 gem_package 'bundler'
+
+pathfinder_mono_pg_gem 'Install PG Gem' do
+  client_version version
+  version '1.0.0'
+end
