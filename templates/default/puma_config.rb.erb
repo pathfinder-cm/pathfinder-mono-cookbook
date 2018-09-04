@@ -1,0 +1,13 @@
+#!/usr/bin/env puma
+
+directory '<%= @directory %>'
+rackup '<%= @directory %>/config.ru'
+environment '<%= @environment %>'
+pidfile '<%= @puma_pids_directory %>/puma.pid'
+state_path '<%= @puma_state_directory %>/puma.state'
+threads 1, 16
+port 8080
+
+on_restart do
+  puts 'On restart...'
+end

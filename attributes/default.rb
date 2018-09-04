@@ -54,3 +54,9 @@ default['postgresql']['config'] = {
   'max_connections' => 1000
 }
 
+# Puma config
+default[cookbook_name]['puma_dir'] = "#{default[cookbook_name]['app_install_dir']}/shared/puma"
+default[cookbook_name]['puma_config_dir'] = "#{default[cookbook_name]['puma_dir']}/config"
+default[cookbook_name]['puma_tmp_dir'] = "#{default[cookbook_name]['puma_dir']}/tmp"
+default[cookbook_name]['puma_pids_dir'] = "#{default[cookbook_name]['puma_tmp_dir']}/pids"
+default[cookbook_name]['puma_state_dir'] = "#{default[cookbook_name]['puma_tmp_dir']}/state"

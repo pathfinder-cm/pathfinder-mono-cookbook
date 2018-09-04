@@ -23,6 +23,5 @@ package %w(software-properties-common ruby2.5 ruby2.5-dev nodejs build-essential
 gem_package 'bundler'
 
 pathfinder_mono_pg_gem 'Install PG Gem' do
-  client_version version
-  version '1.0.0'
+  client_version node['postgresql']['version']
 end
