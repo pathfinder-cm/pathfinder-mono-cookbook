@@ -19,3 +19,19 @@ describe package('ruby2.5 ruby2.5-dev') do
   it { should be_installed }
 end
 
+describe file('/opt/pathfinder-mono') do
+  its('mode') { should cmp '0755' }
+end
+
+describe file('/opt/pathfinder-mono/shared') do
+  its('mode') { should cmp '0755' }
+end
+
+describe file('/opt/pathfinder-mono/pathfinder-mono') do
+  its('mode') { should cmp '0755' }
+end
+
+describe file('/etc/default/pathfinder-mono') do
+  its('mode') { should cmp '0600' }
+end
+
