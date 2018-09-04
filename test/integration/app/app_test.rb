@@ -14,3 +14,8 @@ unless os.windows?
     it { should exist }
   end
 end
+
+describe package('ruby2.5 ruby2.5-dev') do
+  it { should be_installed }
+end
+

@@ -7,3 +7,4 @@
 #
 
 include_recipe 'pathfinder-mono::app_user'
+include_recipe 'pathfinder-mono::app_install'
