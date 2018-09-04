@@ -12,7 +12,7 @@ action :grant do
       source 'pg_hba.conf.erb'
       owner 'postgres'
       group 'postgres'
-      mode '0600'
+      mode '0644'
       variables(
         comment: "#{new_resource.access_user} access",
         type: new_resource.access_type,

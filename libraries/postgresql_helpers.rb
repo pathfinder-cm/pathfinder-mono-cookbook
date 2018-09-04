@@ -15,7 +15,7 @@ module PostgresqlCookbook
     def database_exists?(user, database)
       sql = %(SELECT datname from pg_database WHERE datname='#{database}')
       exists = %(psql -c "#{sql}")
-      exists << " -U #{user}"
+      exists << " -U postgres"
       exists << " | grep #{database}"
       cmd = Mixlib::ShellOut.new(exists, user: 'postgres')
       cmd.run_command
