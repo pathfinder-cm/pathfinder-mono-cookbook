@@ -43,7 +43,7 @@ pathfinder_mono_pg_access "Configuring Access" do
   access_type 'host'
   access_db env['PROD_DB_NAME']
   access_user env['PROD_DB_USER']
-  access_addr '*'
+  access_addr '0.0.0.0/0'
   access_method 'md5'
 end
 
