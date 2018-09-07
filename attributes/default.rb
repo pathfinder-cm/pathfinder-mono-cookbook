@@ -35,6 +35,8 @@ default[cookbook_name]['env_vars'] = {
   'PROD_DB_POOL' => 5,
   'PROD_DB_USER' => 'pathfinder-mono',
   'PROD_DB_PASS' => '123456',
+  'SCHEDULER_TYPE' => 'CONTAINER_NUM',
+  'SCHEDULER_MEMORY_THRESHOLD' => 80,
 }
 
 # PostgreSQL config
