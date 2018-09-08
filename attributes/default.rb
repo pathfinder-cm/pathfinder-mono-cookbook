@@ -26,6 +26,7 @@ default[cookbook_name]['env_vars_file'] = "#{node[cookbook_name]['prefix_env_var
 default[cookbook_name]['env_vars'] = {
   'RAILS_ENV' => node[cookbook_name]['app_env'],
   'RAILS_SERVE_STATIC_FILES' => true,
+  'RAILS_USE_MASTER_KEY' => false,
   'RAILS_MASTER_KEY' => '',
   'SECRET_KEY_BASE' => '123456',
   'TIMESTAMP_FORMAT' => '%d-%m-%Y %H:%M',
