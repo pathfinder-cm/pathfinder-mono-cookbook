@@ -28,3 +28,7 @@ pathfinder_mono_binary_systemd 'pathfinder-scheduler' do
   prefix_log node[cookbook_name]['scheduler']['prefix_log']
   log_file_name node[cookbook_name]['scheduler']['log_file_name']
 end
+
+systemd_unit "pathfinder-scheduler.service" do
+  action :restart
+end
