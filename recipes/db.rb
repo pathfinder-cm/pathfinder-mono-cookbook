@@ -7,6 +7,7 @@
 #
 
 version = node['postgresql']['version']
+locale = node['postgresql']['locale']
 env = node[cookbook_name]['env_vars']
 
 pathfinder_mono_pg_install "Postgresql #{version} Server Install" do
@@ -50,4 +51,5 @@ end
 pathfinder_mono_pg_database "Create Database" do
   database env['PROD_DB_NAME']
   user env['PROD_DB_USER']
+  locale locale
 end

@@ -34,3 +34,5 @@ suites:
         - test/integration/scheduler
     attributes:
       pathfinder-mono:
+      postgresql:
+        locale: 'en_US.UTF-8'

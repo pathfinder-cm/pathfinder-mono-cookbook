@@ -48,6 +48,7 @@ default['postgresql']['data_dir'] = "/var/lib/postgresql/#{pg_version}/main"
 default['postgresql']['external_pid_file'] = "/var/run/postgresql/#{pg_version}-main.pid"
 default['postgresql']['hba_file'] = "#{node['postgresql']['config_dir']}/pg_hba.conf"
 default['postgresql']['ident_file'] = "#{node['postgresql']['config_dir']}/pg_ident.conf"
+default['postgresql']['locale'] = 'C.UTF-8'
 
 default['postgresql']['config'] = {
   'listen_addresses' => '*',
