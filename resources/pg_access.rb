@@ -9,6 +9,7 @@ action :grant do
   path = "/etc/postgresql/#{new_resource.version}/main/pg_hba.conf"
   with_run_context :root do
     edit_resource(:template, path) do |new_resource|
+      cookbook 'pathfinder-mono'
       source 'pg_hba.conf.erb'
       owner 'postgres'
       group 'postgres'
