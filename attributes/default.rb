@@ -60,6 +60,19 @@ default['postgresql']['config'] = {
   'max_connections' => 1000
 }
 
+## Replication config
+default['postgresql']['replication']                  = false
+default['postgresql']['db_master_addr']               = '10.0.10.10'
+default['postgresql']['db_replication_addr']          = '10.0.10.11'
+default['postgresql']['db_replication_username']      = 'replication_user'
+default['postgresql']['db_replication_password']      = 'password1234'
+default['postgresql']['wal_level']                    = 'hot_standby'
+default['postgresql']['archive_mode']                 = 'on'
+default['postgresql']['archive_command']              = 'cd .'
+default['postgresql']['max_wal_senders']              = '8'
+default['postgresql']['hot_standby']                  = 'on'
+
+
 # Puma config
 default[cookbook_name]['puma_dir'] = "#{default[cookbook_name]['app_install_dir']}/shared/puma"
 default[cookbook_name]['puma_config_dir'] = "#{default[cookbook_name]['puma_dir']}/config"

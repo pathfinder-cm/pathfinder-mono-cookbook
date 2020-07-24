@@ -29,12 +29,40 @@ suites:
       - recipe[pathfinder-mono::db]
       - recipe[pathfinder-mono::app]
       - recipe[pathfinder-mono::scheduler]
+    driver_config:
+      customize:
+        memory: 1024
+      network:
+        - ['private_network', {ip: '192.168.33.10'}]
     verifier:
       inspec_tests:
         - test/integration/db
         - test/integration/app
         - test/integration/scheduler
     attributes:
+      app_name: "pathfinder-mono"
       pathfinder-mono:
       postgresql:
         locale: 'en_US.UTF-8'
+        replication: true
+        db_replication_addr: '192.168.33.11'
+        db_replication_username: 'repluser'
+        db_replication_password: 'password1234'
+  - name: replication
+    run_list:
+      - recipe[pathfinder-mono::db_replication]
+    driver_config:
+      customize:
+        memory: 1024
+      network:
+        - ['private_network', {ip: '192.168.33.11'}]
+    verifier:
+      inspec_tests:
+        - test/integration/app
+        - test/unit/spec
+    attributes:
+      app_name: "pathfinder-mono"
+      postgresql:
+        db_master_addr: '192.168.33.10'
+        db_replication_username: 'repluser'
+        db_replication_password: 'password1234'

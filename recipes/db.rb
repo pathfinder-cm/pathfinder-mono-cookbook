@@ -9,6 +9,19 @@
 version = node['postgresql']['version']
 locale = node['postgresql']['locale']
 env = node[cookbook_name]['env_vars']
+additional_config = node['postgresql']['config']
+accesses = []
+
+if node['postgresql']['replication'] == true
+  replication_config = {
+    'wal_level' => node['postgresql']['wal_level'],
+    'max_wal_senders' => node['postgresql']['max_wal_senders'],
+    'archive_mode' => node['postgresql']['archive_mode'],
+    'archive_command' => node['postgresql']['archive_command']
+  }
+  node.override['postgresql']['config'] = additional_config.merge(replication_config)
+  additional_config = node['postgresql']['config']
+end
 
 pathfinder_mono_pg_install "Postgresql #{version} Server Install" do
   version            version
@@ -25,7 +38,7 @@ pathfinder_mono_pg_config "Configuring Postgres Installation" do
   hba_file           node['postgresql']['hba_file']
   ident_file         node['postgresql']['ident_file']
   external_pid_file  node['postgresql']['external_pid_file']
-  additional_config  node['postgresql']['config']
+  additional_config  additional_config
   action :modify
 end
 
@@ -39,13 +52,34 @@ pathfinder_mono_pg_user "Adding user to Postgres Installation" do
   action :create
 end
 
+accesses << {
+  'type' => 'host',
+  'db' => env['PROD_DB_NAME'],
+  'user' => env['PROD_DB_USER'],
+  'address' => '0.0.0.0/0',
+  'method' => 'md5'
+}
+
+if node['postgresql']['replication'] == true
+  pathfinder_mono_pg_user "Creating Replication User" do
+    user node['postgresql']['db_replication_username']
+    password node['postgresql']['db_replication_password']
+    replication true
+    action :create
+  end
+
+  accesses << {
+    'type' => 'host',
+    'db' => 'replication',
+    'user' => node['postgresql']['db_replication_username'],
+    'address' => "#{node['postgresql']['db_replication_addr']}/32",
+    'method' => 'trust'
+  }
+end
+
 pathfinder_mono_pg_access "Configuring Access" do
   version version
-  access_type 'host'
-  access_db env['PROD_DB_NAME']
-  access_user env['PROD_DB_USER']
-  access_addr '0.0.0.0/0'
-  access_method 'md5'
+  accesses accesses
 end
 
 pathfinder_mono_pg_database "Create Database" do
