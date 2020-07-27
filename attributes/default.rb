@@ -22,9 +22,9 @@ default[cookbook_name]['app_env'] = 'production'
 
 # Environment variables
 default[cookbook_name]['prefix_env_vars'] = '/etc/default'
-default[cookbook_name]['env_vars_file'] = "#{node[cookbook_name]['prefix_env_vars']}/#{app_name}"
+default[cookbook_name]['env_vars_file'] = "#{default[cookbook_name]['prefix_env_vars']}/#{app_name}"
 default[cookbook_name]['env_vars'] = {
-  'RAILS_ENV' => node[cookbook_name]['app_env'],
+  'RAILS_ENV' => default[cookbook_name]['app_env'],
   'RAILS_SERVE_STATIC_FILES' => true,
   'RAILS_USE_MASTER_KEY' => false,
   'RAILS_MASTER_KEY' => '',
@@ -46,6 +46,7 @@ default['postgresql']['version'] = pg_version
 default['postgresql']['config_dir'] = "/etc/postgresql/#{pg_version}/main"
 default['postgresql']['data_dir'] = "/var/lib/postgresql/#{pg_version}/main"
 default['postgresql']['external_pid_file'] = "/var/run/postgresql/#{pg_version}-main.pid"
+default['postgresql']['stats_temp_directory'] = "/var/lib/postgresql/#{node['postgresql']['version']}/main/pg_stat_tmp"
 default['postgresql']['hba_file'] = "#{node['postgresql']['config_dir']}/pg_hba.conf"
 default['postgresql']['ident_file'] = "#{node['postgresql']['config_dir']}/pg_ident.conf"
 default['postgresql']['locale'] = 'C.UTF-8'
@@ -82,7 +83,7 @@ default[cookbook_name]['puma_state_dir'] = "#{default[cookbook_name]['puma_tmp_d
 
 # Scheduler config
 default[cookbook_name]['scheduler']['cli_opts'] = []
-default[cookbook_name]['scheduler']['env_vars_file'] = "#{node[cookbook_name]['prefix_env_vars']}/pathfinder-scheduler"
+default[cookbook_name]['scheduler']['env_vars_file'] = "#{default[cookbook_name]['prefix_env_vars']}/pathfinder-scheduler"
 default[cookbook_name]['scheduler']['prefix_log'] = '/var/log/pathfinder-scheduler'
 default[cookbook_name]['scheduler']['log_file_name'] = 'scheduler.log'
 default[cookbook_name]['scheduler']['systemd_unit'] = {
@@ -92,14 +93,14 @@ default[cookbook_name]['scheduler']['systemd_unit'] = {
   },
   'Service' => {
     'Type' => 'simple',
-    'User' => node[cookbook_name]['app_user'],
-    'Group' => node[cookbook_name]['app_group'],
+    'User' => default[cookbook_name]['app_user'],
+    'Group' => default[cookbook_name]['app_group'],
     'Restart' => 'on-failure',
     'RestartSec' => 2,
     'StartLimitInterval' => 50,
     'StartLimitBurst' => 10,
     'ExecStart' => 'TO_BE_COMPLETED',
-    'WorkingDirectory' => "#{node[cookbook_name]['app_install_dir']}/#{app_name}"
+    'WorkingDirectory' => "#{default[cookbook_name]['app_install_dir']}/#{app_name}"
   },
   'Install' => {
     'WantedBy' => 'multi-user.target'

@@ -31,6 +31,7 @@ pathfinder_mono_pg_config "Configuring Postgres Installation" do
   hba_file              node['postgresql']['hba_file']
   ident_file            node['postgresql']['ident_file']
   external_pid_file     node['postgresql']['external_pid_file']
+  stats_temp_directory  node['postgresql']['stats_temp_directory']
   additional_config     additional_config
   action :modify
 end
