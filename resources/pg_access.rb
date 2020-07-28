@@ -1,9 +1,5 @@
 property :version, String, required: true, default: '10'
-property :access_type,   String, required: true, default: 'local'
-property :access_db,     String, required: true, default: 'all'
-property :access_user,   String, required: true, default: 'postgres'
-property :access_addr,   [String, nil], default: nil
-property :access_method, String, required: true, default: 'ident'
+property :accesses, Array, required: true, default: [{type: 'local', db: 'all', user: 'postgres', address: nil, method: 'ident'}]
 
 action :grant do
   path = "/etc/postgresql/#{new_resource.version}/main/pg_hba.conf"
@@ -15,12 +11,7 @@ action :grant do
       group 'postgres'
       mode '0644'
       variables(
-        comment: "#{new_resource.access_user} access",
-        type: new_resource.access_type,
-        db: new_resource.access_db,
-        user: new_resource.access_user,
-        address: new_resource.access_addr,
-        method: new_resource.access_method
+        accesses: new_resource.accesses
       )
       action :nothing
       delayed_action :create

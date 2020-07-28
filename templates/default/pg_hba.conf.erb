@@ -17,5 +17,6 @@ host    all             all             ::1/128                 md5
 ###########
 # From the postgresql_access resources
 ###########
-# <%= @comment %>
-<%= @type.ljust(7) %> <%= @db.ljust(15) %> <%= @user.ljust(15) %> <%= @address.ljust(23) %> <%= @method %>
+<% @accesses.each do |access| %>
+<%= access['type'].ljust(7) %> <%= access['db'].ljust(15) %> <%= access['user'].ljust(15) %> <%= access['address'].ljust(23) %> <%= access['method'] %>
+<% end %>
