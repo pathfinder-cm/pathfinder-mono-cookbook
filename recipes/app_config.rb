@@ -4,10 +4,12 @@ app_group = node[cookbook_name]['app_group']
 release_name = node[cookbook_name]['release_name']
 app_install_dir = node[cookbook_name]['app_install_dir']
 app_shared_dir = node[cookbook_name]['app_shared_dir']
+log_shared_dir = node[cookbook_name]['log_shared_dir']
 
 [
   app_install_dir,
   app_shared_dir,
+  log_shared_dir,
 ].each do |path|
   directory path do
     owner app_user
@@ -28,11 +30,30 @@ git app_install_dir do
   action :sync
 end
 
+directory "#{app_install_dir}/#{release_name}/log" do
+  recursive true
+  action :delete
+end
+
+link "#{app_install_dir}/#{release_name}/log" do
+  to "#{log_shared_dir}"
+  action :create
+  user app_user
+  group app_group
+end
+
 link "#{app_install_dir}/#{app_name}"  do
   to "#{app_install_dir}/#{release_name}"
   action :create
   user app_user
   group app_group
+end
+
+# Keep only 5 latest deployments (avoid removing all other files or folders)
+execute 'ls -1r | egrep \'^[[:digit:]]{10}$\' | tail -n +6 | xargs rm -rf' do
+  user app_user
+  group app_group
+  cwd "#{app_install_dir}"
 end
 
 template "#{app_install_dir}/#{app_name}/.env" do
@@ -49,4 +70,17 @@ template node[cookbook_name]['env_vars_file'] do
   group app_group
   mode 0600
   variables env_vars: node[cookbook_name]['env_vars'].sort.to_h
+end
+
+template '/etc/logrotate.d/pathfinder-mono' do
+  source 'logrotate/pathfinder-mono.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  variables directory: "#{log_shared_dir}"
+end
+
+execute "reschedule daily crontab" do
+  command "sed -i 's/25 6 * * */25 20  * * */' /etc/crontab"
+  only_if "grep 'cron.daily' /etc/crontab 2>&1 > /dev/null"
 end
