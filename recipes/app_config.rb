@@ -49,6 +49,13 @@ link "#{app_install_dir}/#{app_name}"  do
   group app_group
 end
 
+# Keep only 5 latest deployments (avoid removing all other files or folders)
+execute 'ls -1r | egrep \'^[[:digit:]]{10}$\' | tail -n +6 | xargs rm -rf' do
+  user app_user
+  group app_group
+  cwd "#{app_install_dir}"
+end
+
 template "#{app_install_dir}/#{app_name}/.env" do
   source 'dotenv.erb'
   owner app_user
