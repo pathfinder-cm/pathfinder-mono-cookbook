@@ -4,10 +4,12 @@ app_group = node[cookbook_name]['app_group']
 release_name = node[cookbook_name]['release_name']
 app_install_dir = node[cookbook_name]['app_install_dir']
 app_shared_dir = node[cookbook_name]['app_shared_dir']
+log_shared_dir = node[cookbook_name]['log_shared_dir']
 
 [
   app_install_dir,
   app_shared_dir,
+  log_shared_dir,
 ].each do |path|
   directory path do
     owner app_user
@@ -26,6 +28,18 @@ git app_install_dir do
   user app_user
   group app_group
   action :sync
+end
+
+directory "#{app_install_dir}/#{release_name}/log" do
+  recursive true
+  action :delete
+end
+
+link "#{app_install_dir}/#{release_name}/log" do
+  to "#{log_shared_dir}"
+  action :create
+  user app_user
+  group app_group
 end
 
 link "#{app_install_dir}/#{app_name}"  do
@@ -49,4 +63,12 @@ template node[cookbook_name]['env_vars_file'] do
   group app_group
   mode 0600
   variables env_vars: node[cookbook_name]['env_vars'].sort.to_h
+end
+
+template '/etc/logrotate.d/pathfinder-mono' do
+  source 'logrotate/pathfinder-mono.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  variables directory: "#{log_shared_dir}"
 end

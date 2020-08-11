@@ -17,6 +17,7 @@ default[cookbook_name]['app_group'] = cookbook_name
 default[cookbook_name]['release_name'] = Time.now.strftime('%y%m%d%H%M')
 default[cookbook_name]['app_install_dir'] = "/opt/#{cookbook_name}"
 default[cookbook_name]['app_shared_dir'] = "#{default[cookbook_name]['app_install_dir']}/shared"
+default[cookbook_name]['log_shared_dir'] = "#{default[cookbook_name]['app_install_dir']}/shared/log"
 default[cookbook_name]['app_repo'] = 'https://github.com/pathfinder-cm/pathfinder-mono.git'
 default[cookbook_name]['app_env'] = 'production'
 
