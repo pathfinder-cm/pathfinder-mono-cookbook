@@ -79,3 +79,8 @@ template '/etc/logrotate.d/pathfinder-mono' do
   mode '0644'
   variables directory: "#{log_shared_dir}"
 end
+
+execute "reschedule daily crontab" do
+  command "sed -i 's/25 6 * * */25 20  * * */' /etc/crontab"
+  only_if "grep 'cron.daily' /etc/crontab 2>&1 > /dev/null"
+end
